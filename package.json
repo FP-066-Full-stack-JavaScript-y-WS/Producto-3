@@ -1,0 +1,34 @@
+{
+  "name": "producto-3",
+  "version": "1.0.0",
+  "description": "Backend de Plataforma Empleo con Express, GraphQL y MongoDB",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FP-066-Full-stack-JavaScript-y-WS/Producto-3.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/FP-066-Full-stack-JavaScript-y-WS/Producto-3/issues"
+  },
+  "homepage": "https://github.com/FP-066-Full-stack-JavaScript-y-WS/Producto-3#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "graphql": "^16.13.2",
+    "graphql-http": "^1.22.4",
+    "mongodb": "^7.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+  
+}
