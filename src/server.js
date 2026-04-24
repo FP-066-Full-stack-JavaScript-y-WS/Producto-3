@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { buildSchema } from "graphql";
@@ -5,9 +6,10 @@ import { createHandler } from "graphql-http/lib/use/express";
 
 import { schemaString } from "./graphql/schema.js";
 import { root } from "./graphql/root.js";
+import { connectDB } from "./config/db.js";
 
 const app = express();
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 
 const schema = buildSchema(schemaString);
 
@@ -18,7 +20,13 @@ app.all("/graphql", createHandler({
   rootValue: root
 }));
 
-app.listen(PORT, () => {
-  console.log(`Servidor en http://localhost:${PORT}`);
-  console.log(`GraphQL en http://localhost:${PORT}/graphql`);
-});
+async function startServer() {
+  await connectDB();
+
+  app.listen(PORT, () => {
+    console.log(`Servidor en http://localhost:${PORT}`);
+    console.log(`GraphQL en http://localhost:${PORT}/graphql`);
+  });
+}
+
+startServer();
