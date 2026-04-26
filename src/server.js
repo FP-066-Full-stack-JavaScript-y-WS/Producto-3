@@ -21,7 +21,9 @@ app.all("/graphql", createHandler({
 }));
 
 async function startServer() {
-  await connectDB();
+  if (process.env.USE_MEMORY !== "true") {
+    await connectDB();
+  }
 
   app.listen(PORT, () => {
     console.log(`Servidor en http://localhost:${PORT}`);

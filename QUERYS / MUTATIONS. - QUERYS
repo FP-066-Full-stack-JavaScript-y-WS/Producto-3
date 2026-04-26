@@ -1,0 +1,44 @@
+# Pruebas CRUD y validaciones querys / mutation
+
+Backend en modo memoria (USE_MEMORY=true), GraphQL en http://localhost:4000/graphql
+
+## Validaciones implementadas
+- No permite emails repetidos al crear usuario.
+- No permite crear publicacion si el usuario no existe.
+- Solo acepta tipo = oferta o demanda.
+- Campos obligatorios no pueden ir vacios.
+
+## Resultados de pruebas
+
+| 1 | Ver usuarios (inicial) | `query { usuarios { id nombre email } }` | Lista de usuarios | `{"data":{"usuarios":[{"id":"1","nombre":"Carlos","email":"carlos@test.com"}]}}` |
+
+| 2 | Crear usuario OK | `mutation { crearUsuario(nombre: "Sergio", email: "sergio@demo.com") { id nombre email } }` | Usuario creado | `{"data":{"crearUsuario":{"id":"5","nombre":"Sergio","email":"sergio@demo.com"}}}` |
+
+| 3 | Crear usuario con email repetido | `mutation { crearUsuario(nombre: "Otro", email: "sergio@demo.com") { id nombre email } }` | Error por email repetido | `{"errors":[{"message":"El email ya esta registrado.","locations":[{"line":1,"column":12}],"path":["crearUsuario"]}],"data":null}` |
+
+| 4 | Crear usuario con nombre vacio | `mutation { crearUsuario(nombre: "", email: "vac@demo.com") { id nombre email } }` | Error por campo obligatorio | `{"errors":[{"message":"El campo \"nombre\" es obligatorio.","locations":[{"line":1,"column":12}],"path":["crearUsuario"]}],"data":null}` |
+
+| 5 | Buscar usuario por email | `query { usuarioPorEmail(email: "sergio@demo.com") { id nombre email } }` | Devuelve usuario | `{"data":{"usuarioPorEmail":{"id":"5","nombre":"Sergio","email":"sergio@demo.com"}}}` |
+
+| 6 | Ver publicaciones (inicial) | `query { publicaciones { id titulo descripcion tipo usuarioEmail } }` | Lista de publicaciones | `{"data":{"publicaciones":[{"id":"1","titulo":"Desarrollador Frontend","descripcion":"Oferta para trabajar con HTML, CSS y JavaScript","tipo":"oferta","usuarioEmail":"carlos@test.com"},{"id":"2","titulo":"Clases de JS","descripcion":"Nivel basico","tipo":"oferta","usuarioEmail":"sergio@demo.com"},{"id":"4","titulo":"Clases de JS","descripcion":"Nivel basico","tipo":"oferta","usuarioEmail":"sergio@demo.com"}]}}` |
+
+| 7 | Crear publicacion OK | `mutation { crearPublicacion(titulo: "Clases de JS", descripcion: "Nivel basico", tipo: "oferta", usuarioEmail: "sergio@demo.com") { id titulo descripcion tipo usuarioEmail } }` | Publicacion creada | `{"data":{"crearPublicacion":{"id":"5","titulo":"Clases de JS","descripcion":"Nivel basico","tipo":"oferta","usuarioEmail":"sergio@demo.com"}}}` |
+
+| 8 | Crear publicacion con tipo invalido | `mutation { crearPublicacion(titulo: "Clases", descripcion: "Test", tipo: "otro", usuarioEmail: "sergio@demo.com") { id } }` | Error por tipo invalido | `{"errors":[{"message":"El campo \"tipo\" debe ser oferta o demanda.","locations":[{"line":1,"column":12}],"path":["crearPublicacion"]}],"data":null}` |
+
+| 9 | Crear publicacion con usuario inexistente | `mutation { crearPublicacion(titulo: "Clases", descripcion: "Test", tipo: "oferta", usuarioEmail: "noexiste@demo.com") { id } }` | Error por usuario inexistente | `{"errors":[{"message":"No existe un usuario con ese email.","locations":[{"line":1,"column":12}],"path":["crearPublicacion"]}],"data":null}` |
+
+| 10 | Crear publicacion con campos vacios | `mutation { crearPublicacion(titulo: "", descripcion: "", tipo: "", usuarioEmail: "") { id } }` | Error por campos obligatorios | `{"errors":[{"message":"El campo \"titulo\" es obligatorio.","locations":[{"line":1,"column":12}],"path":["crearPublicacion"]}],"data":null}` |
+
+| 11 | Ver publicaciones (despues) | `query { publicaciones { id titulo descripcion tipo usuarioEmail } }` | Lista con nueva publicacion | `{"data":{"publicaciones":[{"id":"1","titulo":"Desarrollador Frontend","descripcion":"Oferta para trabajar con HTML, CSS y JavaScript","tipo":"oferta","usuarioEmail":"carlos@test.com"},{"id":"2","titulo":"Clases de JS","descripcion":"Nivel basico","tipo":"oferta","usuarioEmail":"sergio@demo.com"},{"id":"4","titulo":"Clases de JS","descripcion":"Nivel basico","tipo":"oferta","usuarioEmail":"sergio@demo.com"},{"id":"5","titulo":"Clases de JS","descripcion":"Nivel basico","tipo":"oferta","usuarioEmail":"sergio@demo.com"}]}}` |
+
+| 12 | Buscar publicacion por id | `query { publicacionPorId(id: "5") { id titulo descripcion tipo usuarioEmail } }` | Devuelve publicacion | `{"data":{"publicacionPorId":{"id":"5","titulo":"Clases de JS","descripcion":"Nivel basico","tipo":"oferta","usuarioEmail":"sergio@demo.com"}}}` |
+
+| 13 | Eliminar publicacion | `mutation { eliminarPublicacion(id: "5") }` | true | `{"data":{"eliminarPublicacion":true}}` |
+
+| 14 | Eliminar usuario | `mutation { eliminarUsuario(email: "sergio@demo.com") }` | true | `{"data":{"eliminarUsuario":true}}` |
+
+| 15 | Ver usuarios (final) | `query { usuarios { id nombre email } }` | Lista sin Sergio | `{"data":{"usuarios":[{"id":"1","nombre":"Carlos","email":"carlos@test.com"}]}}` |
+
+## IMPORTANTE
+- En el modo memoria, los datos se reinician al reiniciar el servidor.
