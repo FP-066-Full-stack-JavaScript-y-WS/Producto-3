@@ -1,76 +1,61 @@
 import {
-  find as findUsuarios,
-  findOne as findUsuarioByEmail,
-  insertOne as insertUsuario,
-  deleteOne as deleteUsuario
-} from "../repositories/usuarios.mongo.js";
+  obtenerUsuarios,
+  obtenerUsuarioPorEmail,
+  crearUsuario,
+  eliminarUsuario
+} from "../services/usuarios.service.js";
 
 import {
-  find as findPublicaciones,
-  findOne as findPublicacionById,
-  findByUsuario as findPublicacionesByUsuario,
-  insertOne as insertPublicacion,
-  deleteOne as deletePublicacion
-} from "../repositories/ofertas.mongo.js";
+  obtenerPublicaciones,
+  obtenerPublicacionPorId,
+  obtenerPublicacionesPorUsuario,
+  crearPublicacion,
+  eliminarPublicacion
+} from "../services/ofertas.service.js";
 
 export const root = {
   usuarios: async () => {
-    return await findUsuarios();
+    return await obtenerUsuarios();
   },
 
   usuarioPorEmail: async ({ email }) => {
-    return await findUsuarioByEmail(email);
+    return await obtenerUsuarioPorEmail(email);
   },
 
   publicaciones: async () => {
-    return await findPublicaciones();
+    return await obtenerPublicaciones();
   },
 
   publicacionPorId: async ({ id }) => {
-    return await findPublicacionById(id);
+    return await obtenerPublicacionPorId(id);
   },
 
   publicacionesPorUsuario: async ({ usuarioEmail }) => {
-    return await findPublicacionesByUsuario(usuarioEmail);
+    return await obtenerPublicacionesPorUsuario(usuarioEmail);
   },
 
   crearUsuario: async ({ nombre, email }) => {
-    const nuevoUsuario = {
-      nombre,
-      email
-    };
-
-    const insertedId = await insertUsuario(nuevoUsuario);
-
-    return {
-      id: insertedId.toString(),
-      ...nuevoUsuario
-    };
+    return await crearUsuario({ nombre, email });
   },
 
   eliminarUsuario: async ({ email }) => {
-    const deletedCount = await deleteUsuario(email);
-    return deletedCount > 0;
+    return await eliminarUsuario(email);
   },
 
   crearPublicacion: async ({ titulo, descripcion, tipo, usuarioEmail }) => {
-    const nuevaPublicacion = {
+    return await crearPublicacion({
       titulo,
       descripcion,
       tipo,
       usuarioEmail
-    };
-
-    const insertedId = await insertPublicacion(nuevaPublicacion);
-
-    return {
-      id: insertedId.toString(),
-      ...nuevaPublicacion
-    };
+    });
   },
 
   eliminarPublicacion: async ({ id }) => {
-    const deletedCount = await deletePublicacion(id);
-    return deletedCount > 0;
+    return await eliminarPublicacion(id);
   }
 };
+
+/*Prompt IA:
+¿Cuándo se debe usar async/await en los resolvers de GraphQL?
+IA usada: ChatGPT */

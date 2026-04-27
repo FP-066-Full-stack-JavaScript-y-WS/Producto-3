@@ -10,7 +10,6 @@ function mapUser(user) {
   };
 }
 
-// Obtener todos los usuarios
 export async function find() {
   const db = getDB();
   const users = await db.collection(COLLECTION).find().toArray();
@@ -18,7 +17,6 @@ export async function find() {
   return users.map(mapUser);
 }
 
-// Obtener usuario por email
 export async function findOne(email) {
   const db = getDB();
   const user = await db.collection(COLLECTION).findOne({ email });
@@ -28,7 +26,6 @@ export async function findOne(email) {
   return mapUser(user);
 }
 
-// Crear usuario
 export async function insertOne(user) {
   const db = getDB();
   const result = await db.collection(COLLECTION).insertOne(user);
@@ -36,7 +33,6 @@ export async function insertOne(user) {
   return result.insertedId;
 }
 
-// Eliminar usuario por email
 export async function deleteOne(email) {
   const db = getDB();
   const result = await db.collection(COLLECTION).deleteOne({ email });
