@@ -29,3 +29,7 @@ export function getDB() {
 
   return db;
 }
+
+/*Prompt IA:
+Cómo conecto mi aplicación Node.js a MongoDB Atlas?
+IA usada: ChatGPT */

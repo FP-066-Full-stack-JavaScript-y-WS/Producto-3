@@ -30,3 +30,7 @@ async function startServer() {
 }
 
 startServer();
+
+/*Prompt IA:
+Cómo puedo configurar Express para gestionar las solicitudes de GraphQL y probar las peticiones en Postman?
+IA usada: ChatGPT */
